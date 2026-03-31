@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的私人收藏館</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <nav class="category-nav">
+                <button class="nav-btn active" data-category="all">全部</button>
+                <button class="nav-btn" data-category="video">影片</button>
+                <button class="nav-btn" data-category="comic">漫畫</button>
+                <button class="nav-btn" data-category="anime">動漫</button>
+                <button class="nav-btn" data-category="porn">Porn</button>
+                <button class="nav-btn" data-category="actor">角色</button>
+                <button class="nav-btn" data-category="favorites" style="color: #ff4757;">❤️ 收藏</button>
+            </nav>
+
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="🔍 搜尋番號、標題、標籤...">
+            </div>
+        </header>
+
+        <main class="results-grid" id="results-container">
+            </main>
+    </div>
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close-btn">&times;</button>
+            <h2 id="modal-title">作品標題</h2>
+            <img id="modal-image" src="" alt="作品封面">
+            <div class="modal-details" id="modal-details-container"></div>
+            <div class="modal-tags" id="modal-tags-container"></div>
+            <a id="modal-link" href="#" target="_blank" class="modal-action-btn">前往觀看</a>
+        </div>
+    </div>
+</body>
+</html>

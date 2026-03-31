@@ -1,0 +1,49 @@
+name: 刪除收藏 (Delete Collection)
+
+on:
+  workflow_dispatch:
+    inputs:
+      delete_type:
+        description: '請選擇要刪除的資料類別'
+        required: true
+        type: choice
+        options:
+          - 漫畫
+          - 影片
+          - 動漫
+          - Porn
+          - 角色
+      delete_value:
+        description: '輸入：漫畫/影片填「番號代碼」、動漫填「影片網址」、Porn填「網址或PH代碼」、角色填「精準名字」'
+        required: true
+        type: string
+
+jobs:
+  delete-and-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  # 更新為 v4
+        with:
+          ref: main 
+
+      - name: Set up Python
+        uses: actions/setup-python@v5  # 更新為 v5
+        with:
+          python-version: '3.10'
+          
+      - name: Run delete script
+        env:
+          DELETE_TYPE: ${{ github.event.inputs.delete_type }}
+          DELETE_VALUE: ${{ github.event.inputs.delete_value }}
+        run: |
+          python scripts/delete.py
+          
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5  # 更新為 v5
+        with:
+          commit_message: "chore(data): 自動刪除收藏 (${{ github.event.inputs.delete_value }})"
+          file_pattern: "data.json images"

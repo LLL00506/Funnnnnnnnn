@@ -1,0 +1,49 @@
+name: 清空所有資料 (Reset Project)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: '【危險操作！】確認清空請輸入小寫 "right" (將永久刪除所有 json 紀錄與圖片)'
+        required: true
+        type: string
+
+jobs:
+  reset-everything:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Check Confirmation
+        if: github.event.inputs.confirmation != 'right'
+        run: |
+          echo "錯誤：未輸入 'right'。取消清空操作。"
+          exit 1 
+          
+      - name: Checkout repository
+        uses: actions/checkout@v4  # 更新為 v4
+        with:
+          ref: main
+
+      - name: Clear Data and Images
+        run: |
+          echo "--- 確認 'right'，開始清空 ---"
+          echo "[]" > data.json
+          echo "data.json 已清空。"
+          if [ -d "images" ]; then
+            echo "找到 images/ 資料夾，正在清空..."
+            find images -mindepth 1 -delete
+            touch images/.gitkeep
+          else
+            echo "找不到 images/ 資料夾，建立一個新的..."
+            mkdir images
+            touch images/.gitkeep
+          fi
+          echo "--- 清空完畢 ---"
+          
+      - name: Commit Reset
+        uses: stefanzweifel/git-auto-commit-action@v5  # 更新為 v5
+        with:
+          commit_message: "chore(data): ⚠️ RESET - 清空 data.json 與 images 資料夾"
+          file_pattern: "data.json images"
